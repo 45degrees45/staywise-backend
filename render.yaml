@@ -10,7 +10,7 @@ services:
       - key: API_KEY
         generateValue: true        # Render auto-generates a secure random value
       - key: BASE_URL
-        value: https://staywise-backend.onrender.com  # update after first deploy if URL differs
+        value: https://staywise-backend-8d2u.onrender.com
       - key: DATA_DIR
         value: /tmp/staywise_data
 
