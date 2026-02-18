@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: staywise-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: API_KEY
+        generateValue: true        # Render auto-generates a secure random value
+      - key: BASE_URL
+        value: https://staywise-backend.onrender.com  # update after first deploy if URL differs
+      - key: DATA_DIR
+        value: /tmp/staywise_data
+
+# ── Persistent storage (optional, $0.25/GB/month) ─────────────────────────────
+# Uncomment the disk block below to keep your SQLite database across restarts.
+# Without it, data resets whenever the service redeploys (fine for MVP testing).
+#
+#    disk:
+#      name: staywise-data
+#      mountPath: /var/data
+#      sizeGB: 1
+#
+# Also change DATA_DIR above to: /var/data

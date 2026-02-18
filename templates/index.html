@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Staywise — Is That Reel Actually True?{% endblock %}
+{% block description %}AI-powered scientific credibility analysis for Instagram Reels. Uncover misleading health claims before you share them.{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <h1>Is that reel <em>actually</em> true?</h1>
+    <p class="hero-sub">
+      Staywise uses AI to analyse the scientific credibility of Instagram Reel
+      claims — so you can share with confidence.
+    </p>
+
+    <div class="hero-cta">
+      <p>
+        📱 Analyse reels via our <strong>Telegram Bot</strong>
+      </p>
+      <a
+        href="https://t.me/YOUR_BOT_USERNAME"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        Open Telegram Bot
+      </a>
+      <p class="hero-cta-note">
+        Paste any Instagram Reel link in the chat to get started.
+        Results take 1–3 minutes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── How it works ─────────────────────────────────────────────────────── -->
+  <section class="how-section">
+    <h2>How it works</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-icon">📥</div>
+        <h3>1. Submit</h3>
+        <p>Send an Instagram Reel link to the Telegram bot.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🎙️</div>
+        <h3>2. Transcribe</h3>
+        <p>Audio is transcribed locally using OpenAI Whisper.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🧠</div>
+        <h3>3. Evaluate</h3>
+        <p>A local AI model assesses the scientific credibility of the claim.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🌐</div>
+        <h3>4. Share</h3>
+        <p>Optionally publish the report publicly for others to see.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Recent analyses ──────────────────────────────────────────────────── -->
+  <section class="feed-section">
+    <h2>Recent Analyses</h2>
+
+    {% if reports %}
+    <div class="feed-grid">
+      {% for report in reports %}
+      <a href="/report/{{ report.slug }}" class="card" aria-label="View analysis: {{ report.claim[:60] }}">
+        <div class="card-verdict verdict-{{ report.verdict | verdict_class }}">
+          {{ report.verdict }}
+        </div>
+        <h3 class="card-claim">
+          {{ report.claim[:120] }}{% if report.claim | length > 120 %}…{% endif %}
+        </h3>
+        <div class="card-meta">
+          <span class="badge">{{ report.domain }}</span>
+          <span class="score score-{{ report.credibility_score | score_class }}">
+            {{ report.credibility_score }}/100
+          </span>
+        </div>
+        <div class="score-bar" role="progressbar"
+             aria-valuenow="{{ report.credibility_score }}"
+             aria-valuemin="0" aria-valuemax="100">
+          <div
+            class="score-fill score-fill-{{ report.credibility_score | score_class }}"
+            style="width: {{ report.credibility_score }}%"
+          ></div>
+        </div>
+        <p class="card-date">
+          {{ report.published_at.strftime('%b %d, %Y') }}
+        </p>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <p>No analyses published yet.</p>
+      <p>Be the first! Use the Telegram bot to analyse an Instagram Reel.</p>
+    </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

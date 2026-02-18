@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Staywise{% endblock %}</title>
+  <meta name="description" content="{% block description %}AI-powered scientific credibility analysis for Instagram Reels{% endblock %}" />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="{% block og_title %}Staywise — Scientific Credibility Check{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Uncover the science behind viral Instagram health claims{% endblock %}" />
+  <meta property="og:type"        content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="/" class="nav-brand" aria-label="Staywise home">
+        <span class="brand-icon" aria-hidden="true">🔬</span>
+        <span class="brand-name">Staywise</span>
+      </a>
+      <p class="nav-tagline">Scientific credibility for social media claims</p>
+    </nav>
+  </header>
+
+  <!-- ── Main ────────────────────────────────────────────────────────────── -->
+  <main class="main" id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        Staywise analyses are AI-assisted and intended for informational purposes only.
+        They do <strong>not</strong> constitute medical or professional advice.
+      </p>
+      <p style="margin-top: 0.4rem;">
+        Powered by
+        <a href="https://ollama.ai" target="_blank" rel="noopener">Ollama</a>
+        &amp;
+        <a href="https://openai.com/research/whisper" target="_blank" rel="noopener">Whisper</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

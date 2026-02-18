@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% set claim_short = report.claim[:70] %}
+{% block title %}{{ claim_short }}… — Staywise{% endblock %}
+{% block description %}Credibility score: {{ report.credibility_score }}/100 | {{ report.verdict }} | {{ report.domain }}{% endblock %}
+{% block og_title %}{{ claim_short }}…{% endblock %}
+{% block og_description %}Staywise analysed this claim and gave it {{ report.credibility_score }}/100 for scientific credibility. {{ report.verdict }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="report-page">
+
+    <!-- Back link -->
+    <a href="/" class="back-link">← All Analyses</a>
+
+    <!-- ── Verdict & Claim ────────────────────────────────────────────────── -->
+    <header class="report-header">
+      <div class="report-verdict verdict-{{ report.verdict | verdict_class }}">
+        {{ report.verdict }}
+      </div>
+      <h1 class="report-claim">{{ report.claim }}</h1>
+
+      <!-- Meta chips -->
+      <div class="report-meta">
+        <span class="meta-chip">
+          <strong>Domain:</strong> {{ report.domain }}
+        </span>
+        <span class="meta-chip">
+          <strong>Evidence:</strong> {{ report.evidence_level }}
+        </span>
+        <span class="meta-chip">
+          {{ report.published_at.strftime('%B %d, %Y') }}
+        </span>
+      </div>
+
+      <!-- Original reel link -->
+      <a
+        href="{{ report.reel_url }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="reel-link"
+      >
+        📱 View original Instagram Reel ↗
+      </a>
+    </header>
+
+    <!-- ── Credibility Score ─────────────────────────────────────────────── -->
+    <div class="score-display">
+      <div class="score-number score-{{ report.credibility_score | score_class }}">
+        {{ report.credibility_score }}
+      </div>
+      <div class="score-label">Credibility Score out of 100</div>
+      <div
+        class="score-bar-large"
+        role="progressbar"
+        aria-valuenow="{{ report.credibility_score }}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Credibility score: {{ report.credibility_score }} out of 100"
+      >
+        <div
+          class="score-fill-large score-fill-{{ report.credibility_score | score_class }}"
+          style="width: {{ report.credibility_score }}%"
+        ></div>
+      </div>
+      <div class="evidence-label">{{ report.evidence_level }}</div>
+    </div>
+
+    <!-- ── Analysis ──────────────────────────────────────────────────────── -->
+    <section class="report-section">
+      <h2>Analysis</h2>
+      <p>{{ report.explanation }}</p>
+    </section>
+
+    <!-- ── Red Flags ─────────────────────────────────────────────────────── -->
+    <section class="report-section">
+      <h2>Red Flags</h2>
+      {% if report.red_flags %}
+      <ul class="red-flags-list" aria-label="Red flags identified">
+        {% for flag in report.red_flags %}
+        <li>{{ flag }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="no-flags">No red flags identified</p>
+      {% endif %}
+    </section>
+
+    <!-- ── Transcript Summary ────────────────────────────────────────────── -->
+    <section class="report-section">
+      <h2>Transcript Summary</h2>
+      <p>{{ report.transcript_summary }}</p>
+    </section>
+
+    <!-- ── Share ─────────────────────────────────────────────────────────── -->
+    {% set reddit_title = "Staywise Analysis: " ~ report.claim[:100] ~ " — Score: " ~ report.credibility_score ~ "/100" %}
+    {% set tweet_text   = report.verdict ~ " | Score: " ~ report.credibility_score ~ "/100\n" ~ report.claim[:80] ~ "\n" ~ report_url %}
+
+    <section class="share-section">
+      <h2>Share This Analysis</h2>
+      <p class="share-note">
+        Sharing helps others make informed decisions. Links open a manual post — nothing is posted automatically.
+      </p>
+      <div class="share-buttons">
+        <a
+          href="https://reddit.com/submit?url={{ report_url | urlencode }}&title={{ reddit_title | urlencode }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="share-btn share-reddit"
+          aria-label="Share on Reddit"
+        >
+          🔴 Reddit
+        </a>
+        <a
+          href="https://twitter.com/intent/tweet?text={{ tweet_text | urlencode }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="share-btn share-twitter"
+          aria-label="Share on Twitter / X"
+        >
+          𝕏 Twitter / X
+        </a>
+        <button
+          id="copy-btn"
+          class="share-btn share-copy"
+          onclick="copyLink('{{ report_url }}')"
+          aria-label="Copy report link to clipboard"
+        >
+          🔗 Copy Link
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Disclaimer ────────────────────────────────────────────────────── -->
+    <p class="disclaimer">
+      This analysis is AI-assisted and for informational purposes only.
+      Always consult qualified professionals for medical, nutritional, or scientific advice.
+    </p>
+
+  </div>
+</div>
+{% endblock %}
